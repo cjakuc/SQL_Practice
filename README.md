@@ -10,10 +10,11 @@ Queries are located in the questions folder
 
 ## Local Setup (after hosting the database locally)
 * Clone this repo and cd into the directory
+* Edit the value of `text_path` in `config.py` to be the absolute path to your directory
 * `pipenv install` to create the pip enviroment
 * `pipenv shell` to enter the pip enviroment
 * `python connect.py` to test your connection to the local database
-* `python main.py` to run main.py and create the txt files
+* `python main.py` to run main.py and create the txt files in my_text_files
 
 ## Thought Process:
 * Follow my natural curiosities about the data to learn more about the relationships and what the characteristics are. These answers are in exploration.txt.
