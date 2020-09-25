@@ -1,6 +1,7 @@
 import psycopg2
 from config import config, text_path
 import os.path
+from questions.questions_helper import write_questions_queries_results
 
 def film():
     # read connection parameters
@@ -14,6 +15,11 @@ def film():
     def exec_query(query: str):
         cur.execute(query)
         return cur.fetchall()
+
+    # Instantiate lists for the questions, queries, and results
+    questions = []
+    queries = []
+    final_results = []
 
     # Just look at ALL the films to test everything is working and do some exploration
     film_query = """
@@ -48,14 +54,18 @@ def film():
 
     # How many unique film titles are there?
     ## 1000
+    questions.append("How many unique film titles are there?")
     unique_titles = """
     SELECT COUNT(DISTINCT f.title)
     FROM film as f
     """
+    queries.append(unique_titles)
     unique_titles_results = exec_query(unique_titles)
+    final_results.append(unique_titles_results)
 
     # What is the title of the film (inventory ID = 1489, most common i.ID in rental)?
     ## Flying Hook
+    questions.append("What is the title of the film (inventory ID = 1489, most common i.ID in rental)?")
     title_i1489 = """
     SELECT f.title
     FROM film as f
@@ -63,9 +73,12 @@ def film():
     WHERE
         inventory.inventory_id = 1489
     """
+    queries.append(title_i1489)
     title_i1489_results = exec_query(title_i1489)
+    final_results.append(title_i1489_results)
 
     # Combine the most common rental ID query with the query to get it's title
+    questions.append("Combine the most common rental ID query with the query to get it's title")
     combo_fh = """
     SELECT f.title
     FROM film as f
@@ -81,9 +94,12 @@ def film():
             LIMIT 1
         )
     """
+    queries.append(combo_fh)
     combo_fh_results = exec_query(combo_fh)
+    final_results.append(combo_fh_results)
 
     # Who are the customers that rented Flying Hook?
+    questions.append("Who are the customers that rented Flying Hook?")
     flying_hook = """
     SELECT CONCAT (c.first_name, ' ', c.last_name)
     FROM customer as c
@@ -91,8 +107,11 @@ def film():
     WHERE
         r.inventory_id = 1489
     """
+    queries.append(flying_hook)
     flying_hook_results = exec_query(flying_hook)
+    final_results.append(flying_hook_results)
     # How often did they rent Flying Hook?
+    questions.append("How often did they rent Flying Hook?")
     count_flying_hook = """
     SELECT CONCAT (c.first_name, ' ', c.last_name) as full_name, COUNT(*)
     FROM customer as c
@@ -102,8 +121,11 @@ def film():
     GROUP BY
         full_name
     """
+    queries.append(count_flying_hook)
     count_flying_hook_results = exec_query(count_flying_hook)
+    final_results.append(count_flying_hook_results)
     # The same thing but with the WHERE clause as a subquery to find the most popular rental ID
+    questions.append("The same thing but with the WHERE clause as a subquery to find the most popular rental ID")
     count_flying_hook_combo = """
     SELECT CONCAT (c.first_name, ' ', c.last_name) as full_name, COUNT(*)
     FROM customer as c
@@ -121,7 +143,9 @@ def film():
     GROUP BY
         full_name
     """
+    queries.append(count_flying_hook_combo)
     count_flying_hook_combo_results = exec_query(count_flying_hook_combo)
+    final_results.append(count_flying_hook_combo_results)
 
 
     name_of_file = "exploration.txt"
@@ -133,9 +157,11 @@ def film():
     f.write(f"  The same things as above but a single query to get it without knowing the inv ID: {combo_fh_results[0][0]}\n")
     f.write(f"The customers who rented Flying Hook are named: {flying_hook_results}\n")
     f.write(f"  Here are the customers who rented Flying Hook and how many times they rented it: {count_flying_hook_results}\n")
-    f.write(f"      The same thing with a sub_query instead of a hard-code: {count_flying_hook_combo_results}\n")
+    f.write(f"      The same thing with a sub-query instead of a hard coded value: {count_flying_hook_combo_results}\n")
 
     f.write("\n")
     f.close()
+
+    write_questions_queries_results(questions,queries,final_results,filename="Film Questions")
 
     return

@@ -4,6 +4,8 @@ I locally hosted sample data from [here](https://www.postgresqltutorial.com/post
 
 results.txt will contain the questions I seek to answer, the queries I used, and their results
 
+everything.txt contains ALL of the questions, queries, and results in one place
+
 printable-postgresql-sample-database-diagram is the entity-relationship diagram
 
 Exploration.txt contains the results of my exploratory queries
