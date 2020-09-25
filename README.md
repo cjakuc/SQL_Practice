@@ -1,4 +1,4 @@
-This is a quick python project that I threw together to get some more hands on experience doing complex queries in SQL.
+This is a quick python project that I threw together to get some more hands on experience doing complex queries in SQL. It is very much a work in progress.
 
 I locally hosted sample data from [here](https://www.postgresqltutorial.com/postgresql-sample-database/).
 
