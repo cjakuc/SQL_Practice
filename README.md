@@ -12,7 +12,8 @@ Queries are located in the questions folder
 * Clone this repo and cd into the directory
 * `pipenv install` to create the pip enviroment
 * `pipenv shell` to enter the pip enviroment
-* `python main.py` to run main.py and create results.txt
+* `python connect.py` to test your connection to the local database
+* `python main.py` to run main.py and create the txt files
 
 ## Thought Process:
 * Follow my natural curiosities about the data to learn more about the relationships and what the characteristics are. These answers are in exploration.txt.
