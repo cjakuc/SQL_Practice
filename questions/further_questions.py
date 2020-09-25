@@ -52,15 +52,6 @@ def further():
     # What are all the movies that the person with the most rentals rented?
     questions.append("What are all the movies that the person with the most rentals rented?")
     most_rentals = """
-    SELECT CONCAT (c.first_name, ' ', c.last_name) as full_name
-    FROM rental as r
-    LEFT JOIN customer as c USING (customer_id)
-    GROUP BY
-        full_name
-    ORDER BY
-        COUNT(r.rental_id) DESC
-    LIMIT 1;
-
     SELECT f.title
     FROM film as f
     RIGHT JOIN inventory USING (film_id)
