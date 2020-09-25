@@ -2,7 +2,9 @@ This is a quick python project that I threw together to get some more hands on e
 
 I locally hosted sample data from [here](https://www.postgresqltutorial.com/postgresql-sample-database/).
 
-results.txt contains the questions I sought to answer, the queries I used, and their results. printable-postgresql-sample-database-diagram is the entity-relationship diagram
+results.txt will contain the questions I seek to answer, the queries I used, and their results. printable-postgresql-sample-database-diagram is the entity-relationship diagram
+
+exploration.txt contains the results of my exploratory queries
 
 ## Local Setup (after hosting the database locally)
 * Clone this repo and cd into the directory
