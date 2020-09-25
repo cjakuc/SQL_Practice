@@ -24,13 +24,12 @@ def inventory():
     """
     films_inventory_results = exec_query(films_inventory)
 
-    save_path = "C:/Users/Chris/Desktop/Career/ComplexPGSQL/sample_complex/my_text_files"
+
     name_of_file = "exploration.txt"
     complete_name = os.path.join(text_path, name_of_file)
     f = open(complete_name, "a")
     f.write(f"\nInventory Table Questions\n")
     f.write(f"In the inventory table, there are {films_inventory_results[0][0]} film IDs and {films_inventory_results[0][1]} unique film IDs\n")
-    f.close()
-    
 
+    f.close()
     return

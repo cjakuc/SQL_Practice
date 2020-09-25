@@ -33,7 +33,10 @@ def film():
     FROM film
     """
     all_films_results = exec_query(all_film_titles)
-    f = open("all_movies.txt", "w")
+
+    name_of_file = "all_films.txt"
+    complete_name = os.path.join(text_path, name_of_file)
+    f = open(complete_name, "w")
     f.write("All the movie titles:\n")
     # Write all the movie titles
     for i, v in enumerate(all_films_results):
@@ -51,10 +54,24 @@ def film():
     """
     unique_titles_results = exec_query(unique_titles)
 
-    name_of_file = "all_films.txt"
+    # What is the title of the film (inventory ID = 1489, most common i.ID in rental)?
+    title_i1489 = """
+    SELECT f.title
+    FROM film as f
+    LEFT JOIN inventory USING (film_id)
+    WHERE
+        inventory.inventory_id = 1489
+    """
+    title_i1489_results = exec_query(title_i1489)
+
+    name_of_file = "exploration.txt"
     complete_name = os.path.join(text_path, name_of_file)
     f = open(complete_name, "w")
     f.write("Film Table Questions\n")
     f.write(f"There are {unique_titles_results[0][0]} unique film titles in the film table\n")
+    f.write(f"The title of the most common inventory ID in the rental table (inv ID = 1489) is {title_i1489_results}\n")
+
+    f.write("\n")
+    f.close()
 
     return

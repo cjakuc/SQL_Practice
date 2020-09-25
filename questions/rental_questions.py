@@ -58,7 +58,7 @@ def rental():
 
     name_of_file = "exploration.txt"
     complete_name = os.path.join(text_path, name_of_file)
-    f = open(complete_name, "w")
+    f = open(complete_name, "a")
     f.write("Rental Table Questions\n")
     f.write(f"There are {total_rentals_results[0][0]} total rental IDs in the rental table\n")
     f.write(f"There are {inventory_rental_results[0][0]} total inventory IDs and {unique_rentals_results[0][0]} unique rental IDs in the rental table\n")

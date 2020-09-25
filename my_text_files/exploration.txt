@@ -1,3 +1,7 @@
+Film Table Questions
+There are 1000 unique film titles in the film table
+The title of the most common inventory ID in the rental table (inv ID = 1489) is [('Flying Hook',)]
+
 Rental Table Questions
 There are 16044 total rental IDs in the rental table
 There are 16044 total inventory IDs and 16044 unique rental IDs in the rental table
