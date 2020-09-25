@@ -27,4 +27,4 @@ Queries are located in the questions folder
 * What are the 5 cities with the most rentals of Zoolander and how many rentals did they have?
 * What are the ratings and cataegories of the films rented by the 5 most active customers?
    * Who are the actors in the films rented by the 5 most active customers?
-* What is the average length of films rented in each city?
+* What are the average lengths of films rented in each city?
