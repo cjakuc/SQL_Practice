@@ -1,0 +1,10 @@
+
+Rental Table Questions
+There are 16044 total rental IDs in the rental table
+There are 16044 unique rental IDs in the rental table
+There are 16044 total inventory IDs and 16044 unique rental IDs in the rental table
+There are 4580 unique inventory IDs in the rental table
+The most common inventory ID in the rental table is 1489 with 5 occurences
+
+Inventory Table Questions
+In the inventory table, there are 4581 film IDs and 958 unique film IDs
