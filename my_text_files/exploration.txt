@@ -1,6 +1,10 @@
 Film Table Questions
 There are 1000 unique film titles in the film table
-The title of the most common inventory ID in the rental table (inv ID = 1489) is [('Flying Hook',)]
+The title of the most common inventory ID in the rental table (inv ID = 1489) is Flying Hook
+  The same things as above but a single query to get it without knowing the inv ID: Flying Hook
+The customers who rented Flying Hook are named: [('Victoria Gibson',), ('Alma Austin',), ('Courtney Day',), ('Gwendolyn May',), ('Brett Cornwell',)]
+  Here are the customers who rented Flying Hook and how many times they rented it: [('Alma Austin', 1), ('Brett Cornwell', 1), ('Courtney Day', 1), ('Gwendolyn May', 1), ('Victoria Gibson', 1)]
+      The same thing with a sub_query instead of a hard-code: [('Alma Austin', 1), ('Brett Cornwell', 1), ('Courtney Day', 1), ('Gwendolyn May', 1), ('Victoria Gibson', 1)]
 
 Rental Table Questions
 There are 16044 total rental IDs in the rental table
@@ -10,3 +14,8 @@ The most common inventory ID in the rental table is 1489 with 5 occurences
 
 Inventory Table Questions
 In the inventory table, there are 4581 film IDs and 958 unique film IDs
+
+Further Questions
+The names and cities of 5 customers are: [('Mary Smith', 'Sasebo'), ('Patricia Johnson', 'San Bernardino'), ('Linda Williams', 'Athenai'), ('Barbara Jones', 'Myingyan'), ('Elizabeth Brown', 'Nantou')]
+Here are the 5 customers with the most rentals and their number of rentals: [('Eleanor Hunt', 46), ('Karl Seal', 45), ('Marcia Dean', 42), ('Clara Shaw', 42), ('Tammy Sanders', 41)]
+

@@ -24,7 +24,7 @@ Queries are located in the questions folder
 * Answer these specific questions with SQL queries. These answers are in results.txt.
 
 ## Some specific questions I want to answer:
-* What are the 5 cities with the most rentals of Zoolander and how many rentals did they have?
+* What are the 5 cities with the most rentals of Flying Hook and how many rentals did they have?
 * What are the ratings and cataegories of the films rented by the 5 most active customers?
    * Who are the actors in the films rented by the 5 most active customers?
 * What are the average lengths of films rented in each city?
