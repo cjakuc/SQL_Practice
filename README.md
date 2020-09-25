@@ -6,6 +6,8 @@ results.txt will contain the questions I seek to answer, the queries I used, and
 
 exploration.txt contains the results of my exploratory queries
 
+Queries are located in the questions folder
+
 ## Local Setup (after hosting the database locally)
 * Clone this repo and cd into the directory
 * `pipenv install` to create the pip enviroment
