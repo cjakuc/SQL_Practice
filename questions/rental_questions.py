@@ -59,9 +59,8 @@ def rental():
     name_of_file = "exploration.txt"
     complete_name = os.path.join(text_path, name_of_file)
     f = open(complete_name, "w")
-    f.write("\nRental Table Questions\n")
+    f.write("Rental Table Questions\n")
     f.write(f"There are {total_rentals_results[0][0]} total rental IDs in the rental table\n")
-    f.write(f"There are {unique_rentals_results[0][0]} unique rental IDs in the rental table\n")
     f.write(f"There are {inventory_rental_results[0][0]} total inventory IDs and {unique_rentals_results[0][0]} unique rental IDs in the rental table\n")
     f.write(f"There are {unique_inventory_rental_results[0][0]} unique inventory IDs in the rental table\n")
     f.write(f"The most common inventory ID in the rental table is {mode_inventory_rental_results[0][0]} with {mode_inventory_rental_results[0][1]} occurences\n")
