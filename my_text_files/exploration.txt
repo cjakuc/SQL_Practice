@@ -5,6 +5,8 @@ The title of the most common inventory ID in the rental table (inv ID = 1489) is
 The customers who rented Flying Hook are named: [('Victoria Gibson',), ('Alma Austin',), ('Courtney Day',), ('Gwendolyn May',), ('Brett Cornwell',)]
   Here are the customers who rented Flying Hook and how many times they rented it: [('Alma Austin', 1), ('Brett Cornwell', 1), ('Courtney Day', 1), ('Gwendolyn May', 1), ('Victoria Gibson', 1)]
       The same thing with a sub-query instead of a hard coded value: [('Alma Austin', 1), ('Brett Cornwell', 1), ('Courtney Day', 1), ('Gwendolyn May', 1), ('Victoria Gibson', 1)]
+The film with the most rentals is titled: Bucket Brotherhood. It has 34 rentals
+  The top 5 films with the most rentals are titled: ['Bucket Brotherhood', 'Rocketeer Mother', 'Grit Clockwork', 'Ridgemont Submarine', 'Forward Temple']. They have [34, 33, 32, 32, 32] rentals
 
 Rental Table Questions
 There are 16044 total rental IDs in the rental table
@@ -14,6 +16,8 @@ The most common inventory ID in the rental table is 1489 with 5 occurences
 
 Inventory Table Questions
 In the inventory table, there are 4581 film IDs and 958 unique film IDs
+The film IDs that occur most in the inventory table are: [(638, 8), (266, 8), (350, 8), (764, 8), (91, 8)]
+  The titles of those films are: ['Operation Operation', 'Dynamite Tarzan', 'Garden Island', 'Saturday Lambs', 'Bound Cheaper']
 
 Further Questions
 The names and cities of 5 customers are: [('Mary Smith', 'Sasebo'), ('Patricia Johnson', 'San Bernardino'), ('Linda Williams', 'Athenai'), ('Barbara Jones', 'Myingyan'), ('Elizabeth Brown', 'Nantou')]

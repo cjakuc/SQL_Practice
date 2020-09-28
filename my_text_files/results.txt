@@ -1,0 +1,4 @@
+
+Final Questions
+The 5 cities with the most rentals of Flying Hook and their rental counts are: [('Memphis', 2), ('Almirante Brown', 1), ('Alvorada', 1), ('Bag', 1), ('Allende', 1)]
+

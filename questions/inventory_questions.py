@@ -33,12 +33,43 @@ def inventory():
     films_inventory_results = exec_query(films_inventory)
     final_results.append(films_inventory_results)
 
+    # What 5 film IDs occur the most in the inventory table?
+    questions.append("What 5 film IDs occur the most in the inventory table?")
+    top_film = """
+    SELECT i.film_id, COUNT(*)
+    FROM inventory as i
+    GROUP BY
+        i.film_id
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 5
+    """
+    queries.append(top_film)
+    top_film_results = exec_query(top_film)
+    final_results.append(top_film_results)
+    # What are the titles of those films?
+    titles = []
+    for i, film in enumerate(top_film_results):
+        questions.append(f"What is the title of the {i}th film?")
+        query = f"""
+        SELECT f.title
+        FROM film as f
+        WHERE
+            f.film_id = {film[0]}
+        """
+        queries.append(f"   {query}")
+        query_results = exec_query(query)
+        titles.append(query_results[0][0])
+        final_results.append(f"    {query_results[0][0]}")
+
 
     name_of_file = "exploration.txt"
     complete_name = os.path.join(text_path, name_of_file)
     f = open(complete_name, "a")
     f.write(f"\nInventory Table Questions\n")
     f.write(f"In the inventory table, there are {films_inventory_results[0][0]} film IDs and {films_inventory_results[0][1]} unique film IDs\n")
+    f.write(f"The film IDs that occur most in the inventory table are: {top_film_results}\n")
+    f.write(f"  The titles of those films are: {titles}\n")
 
     f.close()
 

@@ -30,7 +30,7 @@ def write_questions_queries_results(questions: list, queries: list, results: lis
     for i in range(len(questions)):
         f.write(f"\n    Question: {questions[i]}\n")
         f.write(f"  {queries[i]}\n")
-        f.write(f"  {results[i]}\n")
+        f.write(f"      {results[i]}\n")
     f.write(3*"\n")
     f.close()
     return

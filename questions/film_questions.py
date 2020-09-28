@@ -76,6 +76,7 @@ def film():
     queries.append(title_i1489)
     title_i1489_results = exec_query(title_i1489)
     final_results.append(title_i1489_results)
+    # How many times was Flying Hook rented?
 
     # Combine the most common rental ID query with the query to get it's title
     questions.append("Combine the most common rental ID query with the query to get it's title")
@@ -147,6 +148,39 @@ def film():
     count_flying_hook_combo_results = exec_query(count_flying_hook_combo)
     final_results.append(count_flying_hook_combo_results)
 
+    # What title is associated with the most rentals?
+    questions.append("What title is associated with the most rentals?")
+    top_rental = """
+    SELECT film.title, COUNT(*)
+    FROM rental
+    LEFT JOIN inventory USING (inventory_id)
+    LEFT JOIN film USING (film_id)
+    GROUP BY
+        film.film_id
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 1
+    """
+    queries.append(top_rental)
+    top_rental_results = exec_query(top_rental)
+    final_results.append(top_rental_results)
+    # What are top 5 titles associated with the most rentals?
+    questions.append("What are top 5 titles associated with the most rentals?")
+    top_rentals = """
+    SELECT film.title, COUNT(*)
+    FROM rental
+    LEFT JOIN inventory USING (inventory_id)
+    LEFT JOIN film USING (film_id)
+    GROUP BY
+        film.film_id
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 5
+    """
+    queries.append(top_rentals)
+    top_rentals_results = exec_query(top_rentals)
+    final_results.append(top_rentals_results)
+
 
     name_of_file = "exploration.txt"
     complete_name = os.path.join(text_path, name_of_file)
@@ -158,6 +192,8 @@ def film():
     f.write(f"The customers who rented Flying Hook are named: {flying_hook_results}\n")
     f.write(f"  Here are the customers who rented Flying Hook and how many times they rented it: {count_flying_hook_results}\n")
     f.write(f"      The same thing with a sub-query instead of a hard coded value: {count_flying_hook_combo_results}\n")
+    f.write(f"The film with the most rentals is titled: {top_rental_results[0][0]}. It has {top_rental_results[0][1]} rentals\n")
+    f.write(f"  The top 5 films with the most rentals are titled: {[film[0] for film in top_rentals_results]}. They have {[film[1] for film in top_rentals_results]} rentals\n")
 
     f.write("\n")
     f.close()

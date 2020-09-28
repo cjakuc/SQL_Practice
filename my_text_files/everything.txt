@@ -5,7 +5,7 @@ The following items come from the Film Questions file
     SELECT COUNT(DISTINCT f.title)
     FROM film as f
     
-  [(1000,)]
+      [(1000,)]
 
     Question: What is the title of the film (inventory ID = 1489, most common i.ID in rental)?
   
@@ -15,7 +15,7 @@ The following items come from the Film Questions file
     WHERE
         inventory.inventory_id = 1489
     
-  [('Flying Hook',)]
+      [('Flying Hook',)]
 
     Question: Combine the most common rental ID query with the query to get it's title
   
@@ -33,7 +33,7 @@ The following items come from the Film Questions file
             LIMIT 1
         )
     
-  [('Flying Hook',)]
+      [('Flying Hook',)]
 
     Question: Who are the customers that rented Flying Hook?
   
@@ -43,7 +43,7 @@ The following items come from the Film Questions file
     WHERE
         r.inventory_id = 1489
     
-  [('Victoria Gibson',), ('Alma Austin',), ('Courtney Day',), ('Gwendolyn May',), ('Brett Cornwell',)]
+      [('Victoria Gibson',), ('Alma Austin',), ('Courtney Day',), ('Gwendolyn May',), ('Brett Cornwell',)]
 
     Question: How often did they rent Flying Hook?
   
@@ -55,7 +55,7 @@ The following items come from the Film Questions file
     GROUP BY
         full_name
     
-  [('Alma Austin', 1), ('Brett Cornwell', 1), ('Courtney Day', 1), ('Gwendolyn May', 1), ('Victoria Gibson', 1)]
+      [('Alma Austin', 1), ('Brett Cornwell', 1), ('Courtney Day', 1), ('Gwendolyn May', 1), ('Victoria Gibson', 1)]
 
     Question: The same thing but with the WHERE clause as a subquery to find the most popular rental ID
   
@@ -75,7 +75,35 @@ The following items come from the Film Questions file
     GROUP BY
         full_name
     
-  [('Alma Austin', 1), ('Brett Cornwell', 1), ('Courtney Day', 1), ('Gwendolyn May', 1), ('Victoria Gibson', 1)]
+      [('Alma Austin', 1), ('Brett Cornwell', 1), ('Courtney Day', 1), ('Gwendolyn May', 1), ('Victoria Gibson', 1)]
+
+    Question: What title is associated with the most rentals?
+  
+    SELECT film.title, COUNT(*)
+    FROM rental
+    LEFT JOIN inventory USING (inventory_id)
+    LEFT JOIN film USING (film_id)
+    GROUP BY
+        film.film_id
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 1
+    
+      [('Bucket Brotherhood', 34)]
+
+    Question: What are top 5 titles associated with the most rentals?
+  
+    SELECT film.title, COUNT(*)
+    FROM rental
+    LEFT JOIN inventory USING (inventory_id)
+    LEFT JOIN film USING (film_id)
+    GROUP BY
+        film.film_id
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 5
+    
+      [('Bucket Brotherhood', 34), ('Rocketeer Mother', 33), ('Grit Clockwork', 32), ('Ridgemont Submarine', 32), ('Forward Temple', 32)]
 
 
 
@@ -86,28 +114,28 @@ The following items come from the Rental Questions file
     SELECT COUNT(r.rental_id)
     FROM rental as r
     
-  [(16044,)]
+      [(16044,)]
 
     Question: How many rental IDs are unique?
   
     SELECT COUNT(DISTINCT r.rental_id)
     FROM rental as r
     
-  [(16044,)]
+      [(16044,)]
 
     Question: How many total inventory IDs are there in the rental table?
   
     SELECT COUNT(r.inventory_id)
     FROM rental as r
     
-  [(16044,)]
+      [(16044,)]
 
     Question: How many unique inventory IDs are in the rental table? Are all the inventory IDs unique for each rental ID?
   
     SELECT COUNT(DISTINCT r.inventory_id)
     FROM rental as r
     
-  [(4580,)]
+      [(4580,)]
 
     Question: What is the most common inventory ID in the rental table? How many times does it show up?
   
@@ -119,7 +147,7 @@ The following items come from the Rental Questions file
         count(*) DESC
     LIMIT 1;
     
-  [(1489, 5)]
+      [(1489, 5)]
 
 
 
@@ -130,7 +158,64 @@ The following items come from the Inventory Questions file
     SELECT COUNT(i.film_id), COUNT(DISTINCT i.film_id)
     FROM inventory as i
     
-  [(4581, 958)]
+      [(4581, 958)]
+
+    Question: What 5 film IDs occur the most in the inventory table?
+  
+    SELECT i.film_id, COUNT(*)
+    FROM inventory as i
+    GROUP BY
+        i.film_id
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 5
+    
+      [(638, 8), (266, 8), (350, 8), (764, 8), (91, 8)]
+
+    Question: What is the title of the 0th film?
+     
+        SELECT f.title
+        FROM film as f
+        WHERE
+            f.film_id = 638
+        
+          Operation Operation
+
+    Question: What is the title of the 1th film?
+     
+        SELECT f.title
+        FROM film as f
+        WHERE
+            f.film_id = 266
+        
+          Dynamite Tarzan
+
+    Question: What is the title of the 2th film?
+     
+        SELECT f.title
+        FROM film as f
+        WHERE
+            f.film_id = 350
+        
+          Garden Island
+
+    Question: What is the title of the 3th film?
+     
+        SELECT f.title
+        FROM film as f
+        WHERE
+            f.film_id = 764
+        
+          Saturday Lambs
+
+    Question: What is the title of the 4th film?
+     
+        SELECT f.title
+        FROM film as f
+        WHERE
+            f.film_id = 91
+        
+          Bound Cheaper
 
 
 
@@ -144,7 +229,7 @@ The following items come from the Further Questions file
     LEFT JOIN city USING (city_id)
     LIMIT 5
     
-  [('Mary Smith', 'Sasebo'), ('Patricia Johnson', 'San Bernardino'), ('Linda Williams', 'Athenai'), ('Barbara Jones', 'Myingyan'), ('Elizabeth Brown', 'Nantou')]
+      [('Mary Smith', 'Sasebo'), ('Patricia Johnson', 'San Bernardino'), ('Linda Williams', 'Athenai'), ('Barbara Jones', 'Myingyan'), ('Elizabeth Brown', 'Nantou')]
 
     Question: What are the top 5 customers with the most rentals, and how many rentals are there?
   
@@ -157,7 +242,7 @@ The following items come from the Further Questions file
         COUNT(r.rental_id) DESC
     LIMIT 5
     
-  [('Eleanor Hunt', 46), ('Karl Seal', 45), ('Marcia Dean', 42), ('Clara Shaw', 42), ('Tammy Sanders', 41)]
+      [('Eleanor Hunt', 46), ('Karl Seal', 45), ('Marcia Dean', 42), ('Clara Shaw', 42), ('Tammy Sanders', 41)]
 
     Question: What are all the movies that the person with the most rentals rented?
   
@@ -178,7 +263,34 @@ The following items come from the Further Questions file
             LIMIT 1
         );
     
-  [('Affair Prejudice',), ('American Circus',), ('Arizona Bang',), ('Armageddon Lost',), ('Bird Independence',), ('Boulevard Mob',), ('Color Philadelphia',), ('Coma Head',), ('Dinosaur Secretary',), ('Egypt Tenenbaums',), ('English Bulworth',), ('Family Sweet',), ('Forward Temple',), ('Gables Metropolis',), ('Graffiti Love',), ('Gun Bonnie',), ('Hellfighters Sierra',), ('Hollow Jeopardy',), ('Interview Liaisons',), ('Lady Stage',), ('Madigan Dorado',), ('Majestic Floats',), ('Minds Truman',), ('Mummy Creatures',), ('Music Boondock',), ('Name Detective',), ('Opposite Necklace',), ('Others Soup',), ('Outlaw Hanky',), ('Pinocchio Simon',), ('Prejudice Oleander',), ('Quills Bull',), ('Racer Egg',), ('Remember Diary',), ('Robbery Bright',), ('Scissorhands Slums',), ('Secret Groundhog',), ('Snatchers Montezuma',), ('Soldiers Evolution',), ('South Wait',), ('Spirited Casualties',), ('Strictly Scarface',), ('Sun Confessions',), ('Trap Guys',), ('War Notting',), ('Wizard Coldblooded',)]
+      [('Affair Prejudice',), ('American Circus',), ('Arizona Bang',), ('Armageddon Lost',), ('Bird Independence',), ('Boulevard Mob',), ('Color Philadelphia',), ('Coma Head',), ('Dinosaur Secretary',), ('Egypt Tenenbaums',), ('English Bulworth',), ('Family Sweet',), ('Forward Temple',), ('Gables Metropolis',), ('Graffiti Love',), ('Gun Bonnie',), ('Hellfighters Sierra',), ('Hollow Jeopardy',), ('Interview Liaisons',), ('Lady Stage',), ('Madigan Dorado',), ('Majestic Floats',), ('Minds Truman',), ('Mummy Creatures',), ('Music Boondock',), ('Name Detective',), ('Opposite Necklace',), ('Others Soup',), ('Outlaw Hanky',), ('Pinocchio Simon',), ('Prejudice Oleander',), ('Quills Bull',), ('Racer Egg',), ('Remember Diary',), ('Robbery Bright',), ('Scissorhands Slums',), ('Secret Groundhog',), ('Snatchers Montezuma',), ('Soldiers Evolution',), ('South Wait',), ('Spirited Casualties',), ('Strictly Scarface',), ('Sun Confessions',), ('Trap Guys',), ('War Notting',), ('Wizard Coldblooded',)]
+
+
+
+The following items come from the Final Questions file
+
+    Question: What are the 5 cities with the most rentals of Bucket Brotherhood and how many rentals did they have?
+  
+    SELECT city.city, COUNT(*)
+    FROM rental as r
+    LEFT JOIN inventory USING (inventory_id)
+    LEFT JOIN customer USING (customer_id)
+    LEFT JOIN address USING (address_id)
+    LEFT JOIN city USING (city_id)
+    WHERE
+        inventory.film_id = (
+            SELECT film.film_id
+            FROM film
+            WHERE
+                film.title = 'Bucket Brotherhood'
+        )
+    GROUP BY
+        city.city
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 5
+    
+      [('Memphis', 2), ('Almirante Brown', 1), ('Alvorada', 1), ('Bag', 1), ('Allende', 1)]
 
 
 
