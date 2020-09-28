@@ -21,7 +21,11 @@ def write_questions_queries_results(questions: list, queries: list, results: lis
     
     name_of_file = "everything.txt"
     complete_name = os.path.join(text_path, name_of_file)
-    f = open(complete_name, "a")
+    # Recreate everything.txt every time main.py is run
+    if filename == "Film Questions":
+        f = open(complete_name, "w")
+    else:
+        f = open(complete_name, "a")
     f.write(f"The following items come from the {filename} file\n")
     for i in range(len(questions)):
         f.write(f"\n    Question: {questions[i]}\n")

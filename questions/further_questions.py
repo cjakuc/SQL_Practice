@@ -80,7 +80,7 @@ def further():
     f.write(f"\nFurther Questions\n")
     f.write(f"The names and cities of 5 customers are: {cust_city_results}\n")
     f.write(f"Here are the 5 customers with the most rentals and their number of rentals: {city_rentals_results}\n")
-    f.write(f"{most_rentals_results}\n")
+    f.write(f"The person with the most rentals rented these title: {[x[0] for x in most_rentals_results]}\n")
     f.write(f"\n")
 
     f.close()
