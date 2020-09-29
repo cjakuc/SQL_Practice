@@ -2,7 +2,7 @@ import psycopg2
 from config import config
 
 # Python script to test connection to the locally hosted PG SQL server
-## to run from pipenv shell -> python main.py
+## to run from pipenv shell -> python connect.py
 
 def connect():
     """ Connect to the PostgreSQL database server """
