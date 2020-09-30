@@ -27,6 +27,6 @@ Queries are located in the questions folder
 
 ## Some specific questions I want to answer:
 * What are the 5 cities with the most rentals of Bucket Brotherhood and how many rentals did they have?
-* What are the ratings and cataegories of the films rented by the 5 most active customers?
-   * Who are the actors in the films rented by the 5 most active customers?
-* What are the average lengths of films rented in each city?
+* What are the most common ratings and most common categories of the films rented by the 5 most active customers?
+   * Who are the top actors in the films rented by the 5 most active customers?
+* What are the average lengths of films rented in the 5 cities with the most rentals?

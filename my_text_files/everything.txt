@@ -292,5 +292,78 @@ The following items come from the Final Questions file
     
       [('Memphis', 2), ('Almirante Brown', 1), ('Alvorada', 1), ('Bag', 1), ('Allende', 1)]
 
+    Question: What are the most common ratings and most common categories of the films rented by the 5 most active customers?
+  
+    SELECT CONCAT (customer.first_name, ' ', customer.last_name), mode_value(film.rating), mode_value(category.name), COUNT(rental.rental_id)
+    FROM rental
+    LEFT JOIN customer USING (customer_id)
+    LEFT JOIN inventory USING (inventory_id)
+    LEFT JOIN film USING (film_id)
+    LEFT JOIN film_category USING (film_id)
+    LEFT JOIN category USING (category_id)
+    WHERE customer.customer_id IN (
+        SELECT customer.customer_id
+        FROM rental
+        LEFT JOIN customer USING (customer_id)
+        INNER JOIN inventory USING (inventory_id)
+        INNER JOIN film USING (film_id)
+        GROUP BY
+            customer.customer_id
+        ORDER BY
+            COUNT(*) DESC
+        LIMIT 5
+    )
+    GROUP BY
+        customer.customer_id
+    ORDER BY
+        COUNT(rental.rental_id) DESC
+    
+      [('Eleanor Hunt', 'R', 'Sci-Fi', 46), ('Karl Seal', 'NC-17', 'Animation', 45), ('Clara Shaw', 'PG', 'Drama', 42), ('Marcia Dean', 'PG-13', 'Games', 42), ('Tammy Sanders', 'PG', 'Family', 41)]
+
+    Question: Who are the top actors in the films rented by the 5 most active customers? (Actor name, Customer name)
+  
+    SELECT mode_value(CONCAT(actor.first_name, ' ', actor.last_name)), CONCAT (customer.first_name, ' ', customer.last_name)
+    FROM rental
+        LEFT JOIN customer USING (customer_id)
+        LEFT JOIN inventory USING (inventory_id)
+        LEFT JOIN film USING (film_id)
+        LEFT JOIN film_actor USING (film_id)
+        LEFT JOIN actor USING (actor_id)
+    WHERE customer.customer_id IN (
+        SELECT customer.customer_id
+        FROM rental
+            LEFT JOIN customer USING (customer_id)
+            INNER JOIN inventory USING (inventory_id)
+            INNER JOIN film USING (film_id)
+        GROUP BY
+            customer.customer_id
+        ORDER BY
+            COUNT(*) DESC
+        LIMIT 5
+    )
+    GROUP BY
+        customer.customer_id
+    ORDER BY
+        COUNT(rental.rental_id) DESC
+    
+      [('Ray Johansson', 'Eleanor Hunt'), ('Uma Wood', 'Karl Seal'), ('Dustin Tautou', 'Clara Shaw'), ('Charlize Dench', 'Tammy Sanders'), ('Dustin Tautou', 'Marcia Dean')]
+
+    Question: What are the average lengths of films rented in the 5 cities with the most rentals?
+  
+    SELECT city.city, AVG(film.length), COUNT(City.city)
+    FROM inventory
+        LEFT JOIN film USING (film_id)
+        LEFT JOIN rental USING (inventory_id)
+        LEFT JOIN customer USING (customer_id)
+        LEFT JOIN address USING (address_id)
+        LEFT JOIN city USING (city_id)
+    GROUP BY
+        city.city_id
+    ORDER BY
+        COUNT(city.city) DESC
+    LIMIT 5
+    
+      [('Aurora', Decimal('115.1000000000000000'), 50), ('London', Decimal('108.2083333333333333'), 48), ('Saint-Denis', Decimal('116.5217391304347826'), 46), ('Cape Coral', Decimal('119.7333333333333333'), 45), ('Molodetno', Decimal('114.4761904761904762'), 42)]
+
 
 
