@@ -12,6 +12,8 @@ Exploration.txt contains the results of my exploratory queries
 
 Queries are located in the questions folder
 
+To view the final report, you can download the file `report.html` and open it in a web browser, or view it directly on my portfolio page [here](https://cjakuc.github.io/PDFs/report.html)
+
 ## Local Setup (after hosting the database locally)
 * Clone this repo and cd into the directory
 * Edit the value of `text_path` in `config.py` to be the absolute path to my_text_files (it's probably better practice to use relative pathing)
@@ -25,7 +27,7 @@ Queries are located in the questions folder
 * Brainstorm complex questions that I would like to know the answers to. In other words, put myself in the shoes of a stakeholder who wants to know the answers to specific questions.
 * Answer these specific questions with SQL queries. These answers are in results.txt.
 * Brainstorm some more business-focused questions that the hypothetical stakeholder would want answered
-* Answer the questions in a report with text and visualizations (report.md)
+* Answer the questions in a report with text and visualizations
 
 ## Some specific questions I want to answer:
 * What are the 5 cities with the most rentals of Bucket Brotherhood and how many rentals did they have?
