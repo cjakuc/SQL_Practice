@@ -9,6 +9,7 @@ verify_ssl = true
 psycopg2 = "*"
 plotly = "*"
 pandas = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.6"
