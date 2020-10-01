@@ -1,18 +1,16 @@
-This is a quick python project that I threw together to get some more hands on experience doing complex queries in SQL. It is very much a work in progress.
+This is a quick python project that I threw together to get some more hands on experience doing complex queries in SQL. It is very much a work in progress. I locally hosted sample data from [here](https://www.postgresqltutorial.com/postgresql-sample-database/).
 
-I locally hosted sample data from [here](https://www.postgresqltutorial.com/postgresql-sample-database/).
-
-results.txt will contain the questions I seek to answer, the queries I used, and their results
-
-**everything.txt contains ALL of the questions, queries, and results in one place**
+results.txt will the questions I seek to answer, the queries I used, and their results
 
 printable-postgresql-sample-database-diagram is the entity-relationship diagram
 
-Exploration.txt contains the results of my exploratory queries
+exploration.txt contains the results of my exploratory queries
 
 Queries are located in the questions folder
 
-To view the final report, you can download the file `report.html` and open it in a web browser, or view it directly on my portfolio page [here](https://cjakuc.github.io/PDFs/report.html)
+**everything.txt contains ALL of the questions, queries, and results in one place**
+
+**To view the final report, you can download the file `report.html` and open it in a web browser, or view it directly on my portfolio page [here](https://cjakuc.github.io/PDFs/report.html)**
 
 ## Local Setup (after hosting the database locally)
 * Clone this repo and cd into the directory
@@ -27,7 +25,7 @@ To view the final report, you can download the file `report.html` and open it in
 * Brainstorm complex questions that I would like to know the answers to. In other words, put myself in the shoes of a stakeholder who wants to know the answers to specific questions.
 * Answer these specific questions with SQL queries. These answers are in results.txt.
 * Brainstorm some more business-focused questions that the hypothetical stakeholder would want answered
-* Answer the questions in a report with text and visualizations
+* Answer the questions in a [report](https://cjakuc.github.io/PDFs/report.html) with text and visualizations
 
 ## Some specific questions I want to answer:
 * What are the 5 cities with the most rentals of Bucket Brotherhood and how many rentals did they have?
