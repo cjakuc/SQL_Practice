@@ -138,7 +138,7 @@ def final():
     # What are the average lengths of films rented in the 5 cities with the most rentals?
     questions.append("What are the average lengths of films rented in the 5 cities with the most rentals?")
     city_length = """
-    SELECT city.city, AVG(film.length), COUNT(City.city)
+    SELECT city.city, AVG(film.length), COUNT(city.city)
     FROM inventory
         LEFT JOIN film USING (film_id)
         LEFT JOIN rental USING (inventory_id)

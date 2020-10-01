@@ -82,7 +82,7 @@ Final Questions
 
     Question: What are the average lengths of films rented in the 5 cities with the most rentals?
   
-    SELECT city.city, AVG(film.length), COUNT(City.city)
+    SELECT city.city, AVG(film.length), COUNT(city.city)
     FROM inventory
         LEFT JOIN film USING (film_id)
         LEFT JOIN rental USING (inventory_id)
