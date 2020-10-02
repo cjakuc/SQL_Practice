@@ -10,7 +10,7 @@ Queries are located in the questions folder
 
 **everything.txt contains ALL of the questions, queries, and results in one place**
 
-**To view the final report, you can download the file `SQL_Practice_Report.html` and open it in a web browser, or view it directly on my portfolio page [here](https://cjakuc.github.io/PDFs/SQL_Practice_Report.html)**
+**To view the final report, you can download the file `SQL_Practice_Report.html` and open it in a web browser, or view it directly on my portfolio page [here](https://cjakuc.github.io/PDFs/SQL_Practice_Report.html)** __This link is currently saying the page does not exist but I will keep working on it! You can still download the HTML file directly and open it in your browser of choice.__
 
 ## Local Setup (after hosting the database locally)
 * Clone this repo and cd into the directory
