@@ -34,14 +34,14 @@ df = pd.read_csv('https://raw.githubusercontent.com/cjakuc/SQL_Practice/master/r
 table_df = df.sort_values(by='replacement_cost', ascending=False, ignore_index=True)
 cleaned_columns = [x.replace("_", " ").title().replace("Id", "ID") for x in table_df.columns.values]
 cols_dict = {k:v for k, v in zip(table_df.columns.values, cleaned_columns)}
-table_df = table_df.rename(columns=cols_dict, index=str).drop("Fulltext", axis=1)
+table_df = table_df.rename(columns=cols_dict, index=str).drop(["Fulltext", "Film ID"], axis=1)
 ```
 ```{python, echo = FALSE}
 colors = ["lavender" if col != "Replacement Cost" else "red" for col in table_df.columns.values]
 title = "All Films: Sorted by Replacement Cost (Descending)"
 layout = go.Layout(title_text=title, title_x=0.5,
-                   width=1200,
-                   height=600, 
+                   width=1000,
+                   height=500, 
                    xaxis_showgrid=False,
                    yaxis_showgrid=True
                    )
@@ -60,10 +60,10 @@ fig.write_html("data_viz\\FilmsTable.html")
 ```{python, echo = FALSE, include=FALSE}
 # Replacement Cost Histogram
 
-title = 'Replacement Cost  Histogram'               
+title = 'Replacement Cost Histogram'               
 
 layout = go.Layout(title_text=title, title_x=0.5,
-                   width=1500, height=800, 
+                   width=1000, height=500, 
                    xaxis_showgrid=False,
                    yaxis_showgrid=True
                    )
@@ -82,7 +82,7 @@ fig.write_html("data_viz\\ReplacementCostHist.html")
 ```{python, echo = FALSE, include=FALSE}
 # Replacement Cost Correlation Matrix
 
-condition = [col for col in df.columns if col not in ['release_year', 'language_id']]
+condition = [col for col in df.columns if col not in ['release_year', 'language_id', 'film_id']]
 heat_df = df[condition]
 
 sns_colorscale = [[0.0, '#3f7f93'], #cmap = sns.diverging_palette(220, 10, as_cmap = True)
@@ -121,7 +121,7 @@ corr_heat = go.Heatmap(z=corr1,
 title = 'Film Correlation Matrix - Lower Triangle'               
 
 layout = go.Layout(title_text=title, title_x=0.5, 
-                   width=800, height=800,
+                   width=500, height=500,
                    xaxis_showgrid=False,
                    yaxis_showgrid=False,
                    yaxis_autorange='reversed'
@@ -132,24 +132,80 @@ fig.update_yaxes(tickangle=-50)
 fig.write_html("data_viz\\ReplacementCostCorr.html")
 ```
 
+```{python, echo = FALSE, include=FALSE}
+# Ratings Box Plot
+
+title = "Box Plot: Film Rating vs Replacement Cost"
+layout = go.Layout(title=title, title_x=0.5,
+                   width=500, height=500)
+fig = go.Figure(layout=layout)
+fig.add_trace(go.Box(x=df['rating'],
+                     y=df['replacement_cost']))
+fig.update_layout(xaxis_title="Rating",
+                  yaxis_title="Replacement Cost ($)")
+fig.write_html("data_viz\\RatingBoxPlot.html")
+```
+
+```{python, echo = FALSE, include=FALSE}
+# Special Features Box Plot
+
+title = "Box Plot: Special Features vs Replacement Cost"
+layout = go.Layout(title=title, title_x=0.5,
+                   width=1000, height=500)
+fig = go.Figure(layout=layout)
+fig.add_trace(go.Box(x=df['special_features'],
+                     y=df['replacement_cost']))
+fig.update_layout(xaxis_title="Special Features",
+                  yaxis_title="Replacement Cost ($)")
+fig.update_xaxes(tickangle=20)
+fig.write_html("data_viz\\SpecialFeaturesBoxPlot.html")
+```
+
+
 
 
 # Which films are most costly to replace and why?
 
+Of the 1000 films in the database, the average film costs about \$19.98 to replace and the individual costs range from \$9.99 to \$29.99. To get an intuition of why films might be more expensive to replace, it can be helpful to explore the table (Figure 1) below where films are sorted by their replacement cost. It is difficult to learn much this way but as will be shown, there may not even be a definitive connection between a film's characteristics and its replacement cost.
+
+Note: `Language ID` and `Release Year` each only have a single unique value across all of the data.
+
+**Figure 1**
 ```{r, echo = FALSE}
 htmltools::includeHTML("data_viz\\FilmsTable.html")
 ```
 
+The histogram of replacement costs (Figure 2) reveals the lack of a clear pattern among the replacement costs. To further explore what drives replacement cost, we can look at its relationship to other variables.
+
+**Figure 2**
 ```{r, echo = FALSE}
 htmltools::includeHTML("data_viz\\ReplacementCostHist.html")
 ```
 
+Figure 3 is evidence that there is not a linear relationship between the numerical characteristics of a film (rental duration, rental rate, and length), and its replacement cost. The variable with the correlation of the largest magnitude with replacement cost is rental rate at -0.0446. This is a very weak correlation and an additional reason why it would be warranted to explore the relationship between replacement cost and the categorical characteristics of films. 
+
+**Figure 3**
 ```{r, echo = FALSE}
 htmltools::includeHTML("data_viz\\ReplacementCostCorr.html")
 ```
 
-Replacement Cost Correlation Matrix
+Figures 4 and 5 are box plots depicting the distribution of replacement cost relative to the unique values of the two categorical characteristics of films in our data: film rating and special features. Curiously, both the minimum and maximum replacement cost associated with each value for both of these characteristics are almost identical. Combining this with the similarities in interquartile range of replacement cost across the characteristics, it suggests that the categorical valuables are also not clearly connected to the replacement cost.
 
+Note: For Figure 4, hover your cursor over individual box plots to better see the special feature groupings that they correspond to.
+
+**Figure 4**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\RatingBoxPlot.html")
+```
+
+**Figure 5**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\SpecialFeaturesBoxPlot.html")
+```
+
+**Conclusion**
+
+After this preliminary analysis, there are no easily identifiable connections between a film's characteristics and its replacement cost. For future analysis it might be helpful to model non-linear relationships and interactions between variables as they relate to replacement cost. This could be done by fitting a tree-based model and interpreting the feature importances.
 
 # Which are the films with the highest rental rate and is rental rate related to their characteristics at all?
 
