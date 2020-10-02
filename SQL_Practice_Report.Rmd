@@ -1,0 +1,163 @@
+---
+title: "SQL Practice Report"
+author: "Chris Jakuc"
+date: "10/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{python, echo = FALSE}
+# Imports
+
+# reticulate::use_virtualenv(("C:\\Users\\Chris\\.virtualenvs\\sample_complex-Vx1-iWOe")) This is the location of the pipenv venv
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+import plotly.io as pio
+import plotly
+pio.templates.default = "none"
+```
+
+```{python, echo = FALSE}
+# Replacement cost questions
+
+df = pd.read_csv('https://raw.githubusercontent.com/cjakuc/SQL_Practice/master/report_CSVs/costly_df.csv',index_col=0)
+```
+
+```{python, echo = FALSE}
+# Table of all films
+
+# Sort the DF
+table_df = df.sort_values(by='replacement_cost', ascending=False, ignore_index=True)
+cleaned_columns = [x.replace("_", " ").title().replace("Id", "ID") for x in table_df.columns.values]
+cols_dict = {k:v for k, v in zip(table_df.columns.values, cleaned_columns)}
+table_df = table_df.rename(columns=cols_dict, index=str).drop("Fulltext", axis=1)
+```
+```{python, echo = FALSE}
+colors = ["lavender" if col != "Replacement Cost" else "red" for col in table_df.columns.values]
+title = "All Films: Sorted by Replacement Cost (Descending)"
+layout = go.Layout(title_text=title, title_x=0.5,
+                   width=1200,
+                   height=600, 
+                   xaxis_showgrid=False,
+                   yaxis_showgrid=True
+                   )
+fig = go.Figure(data=[go.Table(
+    header=dict(values=list(table_df.columns),
+                fill_color='paleturquoise',
+                align='left'),
+    cells=dict(values=[table_df[col] for col in table_df.columns.values],
+               fill_color=colors,
+               align='left'))],
+               layout=layout)
+
+fig.write_html("data_viz\\FilmsTable.html")
+```
+
+```{python, echo = FALSE, include=FALSE}
+# Replacement Cost Histogram
+
+title = 'Replacement Cost  Histogram'               
+
+layout = go.Layout(title_text=title, title_x=0.5,
+                   width=1500, height=800, 
+                   xaxis_showgrid=False,
+                   yaxis_showgrid=True
+                   )
+
+fig = go.Figure(data=[go.Histogram(x=df['replacement_cost'],
+                                    hovertemplate ='<b>Replacement Cost</b> : $%{x}'+
+                                   '<br><b>Count</b> : %{y}<br>')],
+                layout=layout,
+                )
+fig.update_layout(xaxis_title="Replacement Cost",
+                  yaxis_title="Count",
+                  bargap=0.01)
+fig.write_html("data_viz\\ReplacementCostHist.html")
+```
+
+```{python, echo = FALSE, include=FALSE}
+# Replacement Cost Correlation Matrix
+
+condition = [col for col in df.columns if col not in ['release_year', 'language_id']]
+heat_df = df[condition]
+
+sns_colorscale = [[0.0, '#3f7f93'], #cmap = sns.diverging_palette(220, 10, as_cmap = True)
+ [0.071, '#5890a1'],
+ [0.143, '#72a1b0'],
+ [0.214, '#8cb3bf'],
+ [0.286, '#a7c5cf'],
+ [0.357, '#c0d6dd'],
+ [0.429, '#dae8ec'],
+ [0.5, '#f2f2f2'],
+ [0.571, '#f7d7d9'],
+ [0.643, '#f2bcc0'],
+ [0.714, '#eda3a9'],
+ [0.786, '#e8888f'],
+ [0.857, '#e36e76'],
+ [0.929, '#de535e'],
+ [1.0, '#d93a46']]
+corr = heat_df.corr()
+mask = np.zeros_like(corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+corr1 = corr.mask(mask)
+corr_heat = go.Heatmap(z=corr1,
+                       x=[x.replace("_", " ").title().replace("Id", "ID") for x in corr1.columns.values],
+                       y=[y.replace("_", " ").title().replace("Id", "ID") for y in corr1.columns.values],
+                       xgap=1,
+                       ygap=1,
+                       colorscale=sns_colorscale,
+                       colorbar_ticklen=6,
+                       zmin=-1, zmax=1,
+                       hovertemplate =
+                      '<b>X</b> : %{x}'+
+                      '<br><b>Y</b> : %{y}<br>'+
+                      '<b>Correlation</b>: %{z}'
+                      )
+
+title = 'Film Correlation Matrix - Lower Triangle'               
+
+layout = go.Layout(title_text=title, title_x=0.5, 
+                   width=800, height=800,
+                   xaxis_showgrid=False,
+                   yaxis_showgrid=False,
+                   yaxis_autorange='reversed'
+                   )
+
+fig = go.Figure(data=[corr_heat], layout=layout)
+fig.update_yaxes(tickangle=-50)
+fig.write_html("data_viz\\ReplacementCostCorr.html")
+```
+
+
+
+# Which films are most costly to replace and why?
+
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\FilmsTable.html")
+```
+
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\ReplacementCostHist.html")
+```
+
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\ReplacementCostCorr.html")
+```
+
+Replacement Cost Correlation Matrix
+
+
+# Which are the films with the highest rental rate and is rental rate related to their characteristics at all?
+
+
+# Over time, how popular are the different ratings and categories of films?
+
+
+# Over time, how has the performance of our stores changed? If there is change, is it related to location?
+
+
+# What is the current total outstanding balance of all of our customers?

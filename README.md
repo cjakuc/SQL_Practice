@@ -10,7 +10,7 @@ Queries are located in the questions folder
 
 **everything.txt contains ALL of the questions, queries, and results in one place**
 
-**To view the final report, you can download the file `report.html` and open it in a web browser, or view it directly on my portfolio page [here](https://cjakuc.github.io/PDFs/report.html)**
+**To view the final report, you can download the file `SQL_Practice_Report.html` and open it in a web browser, or view it directly on my portfolio page [here](https://cjakuc.github.io/PDFs/SQL_Practice_Report.html)**
 
 ## Local Setup (after hosting the database locally)
 * Clone this repo and cd into the directory
@@ -25,7 +25,7 @@ Queries are located in the questions folder
 * Brainstorm complex questions that I would like to know the answers to. In other words, put myself in the shoes of a stakeholder who wants to know the answers to specific questions.
 * Answer these specific questions with SQL queries. These answers are in results.txt.
 * Brainstorm some more business-focused questions that the hypothetical stakeholder would want answered
-* Answer the questions in a [report](https://cjakuc.github.io/PDFs/report.html) with text and visualizations
+* Answer the questions in a [report](https://cjakuc.github.io/PDFs/SQL_Practice_Report.html) with text and visualizations
 
 ## Some specific questions I want to answer:
 * What are the 5 cities with the most rentals of Bucket Brotherhood and how many rentals did they have?
