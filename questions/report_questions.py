@@ -34,24 +34,17 @@ def report():
     costly_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\costly_df.csv")
     
 
-    # Which are the films with the highest rental rate and is rental rate related to their characteristics at all?
-    # questions.append("Which are the films with the highest rental rate and is rental rate related to their characteristics at all?")
-    # rental_rate = """
-
-    # """
-    # queries.append(rental_rate)
-    # rental_rate_results = exec_query(rental_rate)
-    # final_results.append(rental_rate_results)
-
-
     # Over time, how popular are the different ratings and categories of films?
-    # questions.append("Over time, how popular are the different ratings and categories of films?")
-    # popularity = """
-
-    # """
-    # queries.append(popularity)
-    # popularity_results = exec_query(popularity)
-    # final_results.append(popularity_results)
+    popular_films = """
+    SELECT film.title, category.name, film.rating, film.rental_duration, film.rental_rate, film.length, film.replacement_cost, film.special_features, rental.rental_date
+    FROM rental
+        LEFT JOIN inventory USING (inventory_id)
+        LEFT JOIN film USING (film_id)
+        LEFT JOIN film_category USING (film_id)
+        LEFT JOIN category USING (category_id)
+    """
+    popular_df = pd.read_sql_query(popular_films, conn)
+    popular_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\popular_df.csv")
 
 
     # Over time, how has the performance of our stores changed? If there is change, is it related to location?
