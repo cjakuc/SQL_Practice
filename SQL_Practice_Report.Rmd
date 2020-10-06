@@ -195,7 +195,7 @@ fig = px.line(
     rdf,
     x='Date',
     y='Count',
-    title='Popularity by Rating Over Time',
+    title='Rentals by Rating Over Time',
     color='Rating',
     text=rdf['Rating'],
     )
@@ -231,7 +231,7 @@ fig = px.line(
     cdf,
     x='Date',
     y='Count',
-    title='Popularity by Category Over Time',
+    title='Rentals by Category Over Time',
     color='Category',
     text=cdf['Category']
     )
@@ -248,6 +248,34 @@ fig.update_layout(
 )
 fig.write_html("data_viz\\CategoryOverTimeLine.html")
 ```
+
+```{python, echo = FALSE, include = FALSE}
+# Bar graphs of films in inventory by rating and category
+
+df = pd.read_csv('https://raw.githubusercontent.com/cjakuc/SQL_Practice/master/report_CSVs/inventory_df.csv',index_col=0)
+# Get a series of the rating + category counts
+rating_counts = df['rating'].value_counts()
+cat_counts = df['category'].value_counts()
+
+# Rating bar graph
+fig = px.bar(rating_counts,
+             x=rating_counts.index,
+             y=rating_counts,
+             title="Film Inventory by Rating")
+fig.update_layout(xaxis_title="Rating",
+                  yaxis_title="Count")
+fig.write_html("data_viz\\RatingBar.html")
+
+# Category bar graph
+fig = px.bar(cat_counts,
+             x=cat_counts.index,
+             y=cat_counts,
+             title="Film Inventory by Category")
+fig.update_layout(xaxis_title="Category",
+                  yaxis_title="Count")
+fig.write_html("data_viz\\CategoryBar.html")
+```
+
 
 
 
@@ -294,10 +322,18 @@ htmltools::includeHTML("data_viz\\SpecialFeaturesBoxPlot.html")
 
 **Conclusion**
 
-After this preliminary analysis, there are no easily identifiable connections between a film's characteristics and its replacement cost. For future analysis it might be helpful to model non-linear relationships and interactions between variables as they relate to replacement cost. This could be done by fitting a tree-based model and interpreting the feature importances.
+After this preliminary analysis, there are no easily identifiable connections between a film's characteristics and its replacement cost. For future analysis it might be helpful to model non-linear relationships and interactions between variables as they relate to replacement cost. This could be done by fitting a tree-based model and interpreting the feature importances or shapley values.
 
 
-# Over time, how popular are the different ratings and categories of films?
+# Over time, how often are the different ratings and categories of films rented?
+
+The rental data covers the time period between May 24th, 2005 to February 14th 2006. There is also an alarming 5-month gap in the data between August 2005 and February 2006. This can be seen in Figures 6 and 8. Such a gap, with 0 rentals, suggests a serious, long-term issue with the data pipeline.
+
+Ignoring this error and the small amount of data (16044 rentals across nearly 10 months), we can still attempt some basic analysis. Looking at Figure 6, it appears that throughout the entire timescale of the data, PG-13 movies are rented most often and G movies are rented least often. Films with other ratings have consistently similar rental counts. This relationship lines up very nicely with the the inventory amounts of films with each rating shown in Figure 7.
+
+The connection between rental counts and inventory continues for categories. This can be seen in Figures 8 and 9. It may be helpful to reference the note here for Figure 9, you can start with the most frequent category in the inventory (Sports) and continually add the next most frequent category.
+
+Note: For Figures 6 and 9, it might be helpful to double click the lines in the legend to view one rating or category at a time. You can toggle on other ratings/categories by clicking once on their line. Be aware that isolating a single rating or category can change the scale of the y axis.
 
 **Figure 6**
 ```{r, echo = FALSE}
@@ -306,11 +342,24 @@ htmltools::includeHTML("data_viz\\RatingOverTimeLine.html")
 
 **Figure 7**
 ```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\RatingBar.html")
+```
+
+**Figure 8**
+```{r, echo = FALSE}
 htmltools::includeHTML("data_viz\\CategoryOverTimeLine.html")
 ```
 
+**Figure 9**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\CategoryBar.html")
+```
 
-# Over time, how has the performance of our stores changed? If there is change, is it related to location?
+**Conclusion**
+
+For this question, timescale and data quality are the main factors preventing any more complex analysis. The relationship between inventory amounts and rental counts is fairly consistent for this small time window, even as total rental count changes. If there was more data, it would be interesting to see if this relationship continues. It would also facilitate in identifying any trends or seasonalities, while also allowing for more robust forecasting of rentals.
+
+# Over time, how has the performance of our stores changed? If there is change, is it related to location or inventory?
 
 
 # What is the current total outstanding balance of all of our customers?
