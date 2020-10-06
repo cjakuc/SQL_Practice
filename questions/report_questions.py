@@ -45,6 +45,16 @@ def report():
     """
     popular_df = pd.read_sql_query(popular_films, conn)
     popular_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\popular_df.csv")
+    # How many films in inventory are in each category/rating?
+    inventory = """
+    SELECT i.inventory_id, f.title, f.rating, c.name as category
+    FROM inventory as i
+        LEFT JOIN film as f USING(film_id)
+        LEFT JOIN film_category USING(film_id)
+        LEFT JOIN category as c USING(category_id)
+    """
+    inventory_df = pd.read_sql_query(inventory, conn)
+    inventory_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\inventory_df.csv")
 
 
     # Over time, how has the performance of our stores changed? If there is change, is it related to location?

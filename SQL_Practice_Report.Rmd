@@ -163,6 +163,95 @@ fig.write_html("data_viz\\SpecialFeaturesBoxPlot.html")
 
 
 
+```{python, echo = FALSE}
+# Popularity over time questions
+import plotly.express as px
+
+df = pd.read_csv('https://raw.githubusercontent.com/cjakuc/SQL_Practice/master/report_CSVs/popular_df.csv',index_col=0)
+# Rename 'name' column to 'category' and drop 'name'
+df['category'] = df['name']
+df = df.drop('name',axis=1)
+# Change the rental_date column from string to datetime
+df['rental_date'] = pd.to_datetime(df['rental_date'])
+```
+
+```{python, echo = FALSE, include = FALSE}
+# Line graph of rentals per month, colored by rating
+
+# Group by rating and get the counts in a new df
+df_rgrouped = (
+    df.groupby([df['rating'], df['rental_date'].astype('datetime64[M]')])
+)['rating'].count().rename('Count').to_frame()
+# The date and ratings are in the index, put them into new lists so we can make a new df w/ Count
+rdate = [x[1] for x in df_rgrouped.index]
+rating = [x[0] for x in df_rgrouped.index]
+rdf = pd.DataFrame(dict(
+    Date=rdate,
+    Count=df_rgrouped['Count'],
+    Rating=rating
+))
+# Plot the graph
+fig = px.line(
+    rdf,
+    x='Date',
+    y='Count',
+    title='Popularity by Rating Over Time',
+    color='Rating',
+    text=rdf['Rating'],
+    )
+fig.update_traces(mode='lines+markers',
+                  hovertemplate=
+                  "<b>%{text}</b><br><br>" +
+                  "Date: %{x|%B-%Y}<br>" +
+                  "Count: %{y}<br>"
+                  "<extra></extra>"
+                  )
+fig.update_layout(
+    xaxis_title="Month",
+    yaxis_title="Count"
+)
+fig.write_html("data_viz\\RatingOverTimeLine.html")
+```
+
+```{python, echo = FALSE, include = FALSE}
+# Line graph of rentals per month, colored by category
+
+# Do all the same things, for category this time
+df_cgrouped = (
+    df.groupby([df['category'], df['rental_date'].astype('datetime64[M]')])
+)['category'].count().rename('Count').to_frame()
+cdate = [x[1] for x in df_cgrouped.index]
+category = [x[0] for x in df_cgrouped.index]
+cdf = pd.DataFrame(dict(
+    Date=cdate,
+    Count=df_cgrouped['Count'],
+    Category=category
+))
+fig = px.line(
+    cdf,
+    x='Date',
+    y='Count',
+    title='Popularity by Category Over Time',
+    color='Category',
+    text=cdf['Category']
+    )
+fig.update_traces(mode='lines+markers',
+                  hovertemplate=
+                  "<b>%{text}</b><br><br>" +
+                  "Date: %{x|%B-%Y}<br>" +
+                  "Count: %{y}<br>" +
+                  "<extra></extra>"
+                  )
+fig.update_layout(
+    xaxis_title="Month",
+    yaxis_title="Count"
+)
+fig.write_html("data_viz\\CategoryOverTimeLine.html")
+```
+
+
+
+
 
 # Which films are most costly to replace and why?
 
@@ -207,10 +296,18 @@ htmltools::includeHTML("data_viz\\SpecialFeaturesBoxPlot.html")
 
 After this preliminary analysis, there are no easily identifiable connections between a film's characteristics and its replacement cost. For future analysis it might be helpful to model non-linear relationships and interactions between variables as they relate to replacement cost. This could be done by fitting a tree-based model and interpreting the feature importances.
 
-# Which are the films with the highest rental rate and is rental rate related to their characteristics at all?
-
 
 # Over time, how popular are the different ratings and categories of films?
+
+**Figure 6**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\RatingOverTimeLine.html")
+```
+
+**Figure 7**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\CategoryOverTimeLine.html")
+```
 
 
 # Over time, how has the performance of our stores changed? If there is change, is it related to location?

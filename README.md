@@ -14,6 +14,8 @@ Queries are located in the questions folder
 
 **To view the final report, you can download the file `SQL_Practice_Report.html` and open it in a web browser, or view it directly on my portfolio page [here](https://cjakuc.github.io/PDFs/SQL_Practice_Report.html)** _If the link is saying that the page does not exist, come back in a half hour or so. It's hosted on my portfolio site and that can sometimes be slow to update and cause this error._
 
+To view the Google Colaboratory notebooks where I did my exploratory data analysis and initially created all the visualizations, check out [this folder on my Google Drive](https://drive.google.com/drive/folders/103dp6GVmZI4ARcWXNXe5Pljn6O9ATq2r?usp=sharing).
+
 ## Local Setup (after hosting the database locally)
 * Clone this repo and cd into the directory
 * Edit the value of `text_path` in `config.py` to be the absolute path to my_text_files (it's probably better practice to use relative pathing)
