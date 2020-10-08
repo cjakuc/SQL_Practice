@@ -3,8 +3,8 @@ title: "SQL Practice Report"
 author: "Chris Jakuc"
 date: "10/2/2020"
 output:
-  word_document: default
   html_document: default
+  word_document: default
   pdf_document: default
 ---
 
@@ -206,12 +206,12 @@ fig.update_traces(mode='lines+markers',
                   hovertemplate=
                   "<b>%{text}</b><br><br>" +
                   "Date: %{x|%B-%Y}<br>" +
-                  "Count: %{y}<br>"
+                  "Rentals: %{y}<br>"
                   "<extra></extra>"
                   )
 fig.update_layout(
     xaxis_title="Month",
-    yaxis_title="Count"
+    yaxis_title="Rentals"
 )
 fig.write_html("data_viz\\RatingOverTimeLine.html")
 ```
@@ -242,12 +242,12 @@ fig.update_traces(mode='lines+markers',
                   hovertemplate=
                   "<b>%{text}</b><br><br>" +
                   "Date: %{x|%B-%Y}<br>" +
-                  "Count: %{y}<br>" +
+                  "Rentals: %{y}<br>" +
                   "<extra></extra>"
                   )
 fig.update_layout(
     xaxis_title="Month",
-    yaxis_title="Count"
+    yaxis_title="Rentals"
 )
 fig.write_html("data_viz\\CategoryOverTimeLine.html")
 ```
@@ -266,7 +266,10 @@ fig = px.bar(rating_counts,
              y=rating_counts,
              title="Film Inventory by Rating")
 fig.update_layout(xaxis_title="Rating",
-                  yaxis_title="Count")
+                  yaxis_title="Films")
+fig.update_traces(hovertemplate =
+                  '<b>Rating</b>: %{x}'+
+                  '<br><b>Films in Inventory</b>: %{y}')
 fig.write_html("data_viz\\RatingBar.html")
 
 # Category bar graph
@@ -275,11 +278,112 @@ fig = px.bar(cat_counts,
              y=cat_counts,
              title="Film Inventory by Category")
 fig.update_layout(xaxis_title="Category",
-                  yaxis_title="Count")
+                  yaxis_title="Films")
+fig.update_traces(hovertemplate =
+                  '<b>Category</b>: %{x}'+
+                  '<br><b>Films in Inventory</b>: %{y}')
 fig.write_html("data_viz\\CategoryBar.html")
 ```
 
 
+
+```{python, echo = FALSE, include = FALSE}
+# Store questions
+
+# Rentals in each store: load the data and format it
+df = pd.read_csv('https://raw.githubusercontent.com/cjakuc/SQL_Practice/master/report_CSVs/stores_df.csv',index_col=0)
+df_sgrouped = (
+    df.groupby([df['store_id'], df['rental_date'].astype('datetime64[M]')])
+)['rental_id'].count().rename('Count').to_frame()
+rdate = [x[1] for x in df_sgrouped.index]
+store_id = [x[0] for x in df_sgrouped.index]
+sdf = pd.DataFrame(dict(
+    Date=rdate,
+    Count=df_sgrouped['Count'],
+    Store_ID=store_id
+))
+
+# Make a line plot
+fig = px.line(
+    sdf,
+    x='Date',
+    y='Count',
+    title='Rentals in Each Store Over Time',
+    color='Store_ID',
+    text=sdf['Store_ID'],
+    )
+fig.update_traces(mode='lines+markers',
+                  hovertemplate=
+                  "<b>Store ID: %{text}</b><br><br>" +
+                  "Date: %{x|%B-%Y}<br>" +
+                  "Rentals: %{y}<br>"
+                  "<extra></extra>"
+                  )
+fig.update_layout(
+    xaxis_title="Month",
+    yaxis_title="Rentals"
+)
+fig.write_html("data_viz\\StoreTotalsLine.html")
+```
+
+```{python, echo = FALSE, include = FALSE}
+# Average rentals per hour in each store
+
+# Cleaning + formatting
+df['hour'] = df.rental_date.astype('datetime64[h]')
+by_time = (
+    df.groupby([df['store_id'], df['hour']],as_index=False)
+)['rental_id'].count()
+by_time['Count'] = by_time['rental_id']
+by_time.drop("rental_id", axis=1)
+by_time.index = by_time.hour
+by_time_final = by_time.groupby([by_time.store_id, by_time.index.hour])['Count'].mean().rename("Mean").to_frame()
+by_time_final.reset_index(inplace=True)
+
+# Make the plot
+fig = px.line(
+    by_time_final,
+    x="hour",
+    y='Mean',
+    title='Average Rentals Per Hour in Each Store',
+    color='store_id',
+    text=by_time_final['store_id'],
+    )
+fig.update_traces(mode='lines+markers',
+                  hovertemplate=
+                  "<b>Store ID: %{text}</b><br><br>" +
+                  "Hour: %{x}<br>" +
+                  "Average Rentals: %{y}<br>"
+                  "<extra></extra>"
+                  )
+fig.update_layout(
+    xaxis_title="Hour of the Day",
+    yaxis_title="Rentals"
+)
+fig.write_html("data_viz\\StoreAvgsLine.html")
+```
+
+```{python, echo = FALSE, include = FALSE}
+# Inventory counts by store
+
+# Clean and format
+df = pd.read_csv('https://raw.githubusercontent.com/cjakuc/SQL_Practice/master/report_CSVs/stores_inventory_df.csv',index_col=0)
+store_counts = df.store_id.value_counts()
+
+# Plot it
+fig = px.bar(store_counts,
+             x=store_counts.index,
+             y=store_counts,
+             title="Film Inventory in Each Store")
+fig.update_layout(xaxis_title="Store",
+                  yaxis_title="Films",
+                  xaxis_tickvals=[1,2]
+                  )
+fig.update_traces(hovertemplate =
+                  '<b>Store</b>: %{x}'+
+                  '<br><b>Films in Inventory</b>: %{y}')
+fig.write_html("data_viz\\StoreInvBar.html")
+```
 
 
 
@@ -362,7 +466,33 @@ htmltools::includeHTML("data_viz\\CategoryBar.html")
 
 For this question, timescale and data quality are the main factors preventing any more complex analysis. The relationship between inventory amounts and rental counts is fairly consistent for this small time window, even as total rental count changes. If there was more data, it would be interesting to see if this relationship continues. It would also facilitate in identifying any trends or seasonalities, while also allowing for more robust forecasting of rentals.
 
-# Over time, how has the performance of our stores changed? If there is change, is it related to location or inventory?
+# Over time, how do the performances of the different stores compare?
 
+It is important to point out that although the data shows that films are rented in 597 different cities, there are only 2 unique stores. The store with ID 1 is listed in the Alberta district of Lethbridge. The store with ID 2 is listed in the QLD district of Woodbridge.
+
+In real data the discrepancy between store counts and cities of rentals would raise major questions about the data quality, but this is fake data after all. We can still try to do some analysis on how the 2 stores compare to each other.
+
+Figure 10 shows that, over the time period covered by the data, both stores have a nearly identical pattern of rentals per month, with store 1 consistently outperforming store 2. The previous finding where we saw that more inventory of films leads to more rentals also seems to hold true for the stores. Figure 11 shows that store 1 simply has more inventory than store 2 and this could very well explain the performance difference between the two stores.
+
+**Figure 10**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\StoreTotalsLine.html")
+```
+
+**Figure 11**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\StoreInvBar.html")
+```
+
+I was curious how the two stores compare in terms of rentals over the course of an average day so I created Figure 12. Figure 12 depicts the average number of rentals in each store across every hour of the day. It seems that the stores do have very similar daily rental patterns, with both stores on average seeing a spike in rentals at 3:00 PM. It is also interesting to note that these stores are apparently open 24 hours a day.
+
+**Figure 12**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\StoreAvgsLine.html")
+```
+
+**Conclusion**
+
+The limitations of using fake data really made themselves known when looking at rentals on the store level. My best guess is that the creator of this dataset generated the rental data by "renting" a random percentage of the inventory at mostly random times. By randomly selecting inventory to "rent", it would make sense that the films with the most common ratings/categories and the films at stores with the largest inventory are the films that are rented most often. Though in reality, there could be other identifiable explanations for this pattern, for example: perhaps stores have a larger inventory if they're simply more popular stores or the cities that they're located in are more populous. If these stores and cities were real it could be helpful to compare the population totals, densities, and demographics of the areas surrounding the stores and see how they relate to rental patterns.
 
 # What is the current total outstanding balance of all of our customers?
