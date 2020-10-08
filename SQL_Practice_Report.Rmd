@@ -2,7 +2,10 @@
 title: "SQL Practice Report"
 author: "Chris Jakuc"
 date: "10/2/2020"
-output: html_document
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}

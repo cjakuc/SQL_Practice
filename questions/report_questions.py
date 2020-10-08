@@ -57,14 +57,27 @@ def report():
     inventory_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\inventory_df.csv")
 
 
-    # Over time, how has the performance of our stores changed? If there is change, is it related to location?
-    # questions.append("Over time, how has the performance of our stores changed? If there is change, is it related to location?")
-    # stores = """
+    # Over time, how has the performance of our stores changed? If there is change, is it related to location or inventory?
+    stores = """
+    SELECT rental.rental_id, rental.rental_date, customer.store_id, city.city, address.district
+    FROM rental
+        LEFT JOIN customer USING(customer_id)
+        LEFT JOIN address USING(address_id)
+        LEFT JOIN city USING(city_id)
+    """
+    stores_df = pd.read_sql_query(stores, conn)
+    stores_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\stores_df.csv")
 
-    # """
-    # queries.append(stores)
-    # stores_results = exec_query(stores)
-    # final_results.append(stores_results)
+    stores_inventory = """
+    SELECT inventory.inventory_id, customer.store_id, city.city, address.district
+    FROM inventory
+        LEFT JOIN rental USING(inventory_id)
+        LEFT JOIN customer USING(customer_id)
+        LEFT JOIN address USING(address_id)
+        LEFT JOIN city USING(city_id)
+    """
+    stores_inventory_df = pd.read_sql_query(stores_inventory, conn)
+    stores_inventory_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\stores_inventory_df.csv")
 
 
     # What is the current total outstanding balance of all of our customers?
