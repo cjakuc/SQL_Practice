@@ -41,4 +41,4 @@ To view the Google Colaboratory notebooks where I did my exploratory data analys
 * Which films are most costly to replace and why?
 * Over time, how often are the different ratings and categories of films rented?
 * Over time, how do the performances of the different stores compare?
-* What is the current total outstanding balance of all of our customers?
+* What is the current total balance of all of our customers?

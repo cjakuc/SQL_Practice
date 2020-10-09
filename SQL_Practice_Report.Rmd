@@ -387,17 +387,17 @@ fig.write_html("data_viz\\StoreInvBar.html")
 ```
 
 
-```{python}
-# Customers' balance analysis
+```{python, echo = FALSE, include = FALSE}
+# Customer balances
 
 df = pd.read_csv('https://raw.githubusercontent.com/cjakuc/SQL_Practice/master/report_CSVs/balances_df.csv',index_col=0)
-
-# Table of summary statistics
 summary = df['Balance'].describe()
 summary_df = pd.DataFrame(summary, columns=['Balance'])
 summary_df.reset_index(inplace=True)
 summary_df['Statistics'] = summary_df['index']
 summary_df = summary_df.drop('index', axis=1)
+
+# Table of summary stats
 colors = ["lavender" if col == "Balance" else "red" for col in summary_df.columns.values]
 title = "Summary Statistics of Customer Balances"
 layout = go.Layout(title_text=title, title_x=0.5,
@@ -406,6 +406,7 @@ layout = go.Layout(title_text=title, title_x=0.5,
                    xaxis_showgrid=False,
                    yaxis_showgrid=True
                    )
+
 fig = go.Figure(data=[go.Table(
     header=dict(values=list(summary_df.columns)[::-1],
                 fill_color='paleturquoise',
@@ -414,8 +415,8 @@ fig = go.Figure(data=[go.Table(
                fill_color=colors,
                align='left'))],
                layout=layout)
+fig.write_html("data_viz\\CustBalStats.html")
 ```
-
 
 
 
@@ -527,4 +528,17 @@ htmltools::includeHTML("data_viz\\StoreAvgsLine.html")
 
 The limitations of using fake data really made themselves known when looking at rentals on the store level. My best guess is that the creator of this dataset generated the rental data by "renting" a random percentage of the inventory at mostly random times. By randomly selecting inventory to "rent", it would make sense that the films with the most common ratings/categories and the films at stores with the largest inventory are the films that are rented most often. Though in reality, there could be other identifiable explanations for this pattern, for example: perhaps stores have a larger inventory if they're simply more popular stores or the cities that they're located in are more populous. If these stores and cities were real it could be helpful to compare the population totals, densities, and demographics of the areas surrounding the stores and see how they relate to rental patterns.
 
-# What is the current total outstanding balance of all of our customers?
+# What is the current total balance of all of our customers?
+
+In order to calculate the total balance of all the customers, I used a set of payment rules set out in the custom functions of the provided database that defines a customer's balance:
+1. Calculate and charge rental fees for all previous rentals
+2. Charge one dollar for every day the previous rentals are overdue
+3. If a film is overdue for longer than 2 times the rental duration, charge the replacement cost
+4. Credit all payments made before the date specified (I used the last date that any payment was made in the payment table)
+
+The custom function needed a bit of editing, but I was able to calculate the current (as of the most recent payment on May 14th, 2007) balance of all 599 customers in the data. In aggregate, the customers have a total credit of approximately \$11,734.30. Without knowing more details about the business model of the company, it is difficult to tell if so many customers carrying a positive balance is expected. Conversely, the total amount owed by all customers is \$529.95. 
+
+**Figure 13**
+```{r, echo = FALSE}
+htmltools::includeHTML("data_viz\\CustBalStats.html")
+```
