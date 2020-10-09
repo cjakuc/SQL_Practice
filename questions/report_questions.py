@@ -57,7 +57,7 @@ def report():
     inventory_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\inventory_df.csv")
 
 
-    # Over time, how has the performance of our stores changed? If there is change, is it related to location or inventory?
+    # Over time, how do the performances of the different stores compare?
     stores = """
     SELECT rental.rental_id, rental.rental_date, customer.store_id, city.city, address.district
     FROM rental
@@ -85,15 +85,28 @@ def report():
     # There are customers w/ unique IDs 1-599
     ## We can use the built-in get_customer_balance(customer_id, timestamp without time zone) function for each customer to get each customer's balance
 
-    # We first need to get the timestamp of each customer's most recent payment
-    ## We can do this in the same query as we get their current outstanding balance
+    # We first need to get the timestamp of the most recent payment in the payment table
+    date_query = """
+    SELECT p.payment_date
+    FROM payment as p
+    ORDER BY p.payment_date DESC
+    LIMIT 1
+    """
+    payment_date = exec_query(date_query)[0][0]
+    # print(payment_date.strftime("%m/%d/%Y, %H:%M:%S"))
+
     cust_balances = {}
     for i in range(1,600):
+        # bal_query = f"""
+        # SELECT get_customer_balance({i}, ((SELECT p.payment_date FROM payment as p WHERE p.customer_id = {i} ORDER BY p.payment_date DESC LIMIT 1)))
+        # """
         bal_query = f"""
-        SELECT get_customer_balance({i}, ((SELECT p.payment_date FROM payment as p WHERE p.customer_id = {i} ORDER BY p.payment_date DESC LIMIT 1)))
+        SELECT get_customer_balance({i}, '{payment_date.strftime("%m/%d/%Y, %H:%M:%S")}'::timestamp without time zone)
         """
         # SELECT get_customer_balance(1::integer, (SELECT p.payment_date::timestamp without time zone FROM payment as p WHERE p.customer_id = 1 ORDER BY p.payment_date DESC LIMIT 1))
         cust_balances[i] = exec_query(bal_query)[0][0]
+        # This is calculated as of the last time a customer MADE A PAYMENT, should probably calculate it on the last day that the payment table was updated overall
+        ## FIXED and it didn't change anything ¯\_(ツ)_/¯
     
     balances_df = pd.DataFrame.from_dict(cust_balances, orient='index', columns=['Balance'])
     balances_df.reset_index(inplace=True)

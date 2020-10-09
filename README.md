@@ -40,5 +40,5 @@ To view the Google Colaboratory notebooks where I did my exploratory data analys
 ## Report Questions to Answer:
 * Which films are most costly to replace and why?
 * Over time, how often are the different ratings and categories of films rented?
-* Over time, how has the performance of our stores changed? If there is change, is it related to location?
+* Over time, how do the performances of the different stores compare?
 * What is the current total outstanding balance of all of our customers?

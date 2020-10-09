@@ -39,6 +39,7 @@ cleaned_columns = [x.replace("_", " ").title().replace("Id", "ID") for x in tabl
 cols_dict = {k:v for k, v in zip(table_df.columns.values, cleaned_columns)}
 table_df = table_df.rename(columns=cols_dict, index=str).drop(["Fulltext", "Film ID"], axis=1)
 ```
+
 ```{python, echo = FALSE}
 colors = ["lavender" if col != "Replacement Cost" else "red" for col in table_df.columns.values]
 title = "All Films: Sorted by Replacement Cost (Descending)"
@@ -384,6 +385,37 @@ fig.update_traces(hovertemplate =
                   '<br><b>Films in Inventory</b>: %{y}')
 fig.write_html("data_viz\\StoreInvBar.html")
 ```
+
+
+```{python}
+# Customers' balance analysis
+
+df = pd.read_csv('https://raw.githubusercontent.com/cjakuc/SQL_Practice/master/report_CSVs/balances_df.csv',index_col=0)
+
+# Table of summary statistics
+summary = df['Balance'].describe()
+summary_df = pd.DataFrame(summary, columns=['Balance'])
+summary_df.reset_index(inplace=True)
+summary_df['Statistics'] = summary_df['index']
+summary_df = summary_df.drop('index', axis=1)
+colors = ["lavender" if col == "Balance" else "red" for col in summary_df.columns.values]
+title = "Summary Statistics of Customer Balances"
+layout = go.Layout(title_text=title, title_x=0.5,
+                   width=1000,
+                   height=500, 
+                   xaxis_showgrid=False,
+                   yaxis_showgrid=True
+                   )
+fig = go.Figure(data=[go.Table(
+    header=dict(values=list(summary_df.columns)[::-1],
+                fill_color='paleturquoise',
+                align='left'),
+    cells=dict(values=[summary_df[col] for col in summary_df.columns.values][::-1],
+               fill_color=colors,
+               align='left'))],
+               layout=layout)
+```
+
 
 
 
