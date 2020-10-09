@@ -104,6 +104,7 @@ def report():
         SELECT get_customer_balance({i}, '{payment_date.strftime("%m/%d/%Y, %H:%M:%S")}'::timestamp without time zone)
         """
         # SELECT get_customer_balance(1::integer, (SELECT p.payment_date::timestamp without time zone FROM payment as p WHERE p.customer_id = 1 ORDER BY p.payment_date DESC LIMIT 1))
+        # print(exec_query(bal_query)) # Check that the query is only returning the final calculation: it is
         cust_balances[i] = exec_query(bal_query)[0][0]
         # This is calculated as of the last time a customer MADE A PAYMENT, should probably calculate it on the last day that the payment table was updated overall
         ## FIXED and it didn't change anything ¯\_(ツ)_/¯
