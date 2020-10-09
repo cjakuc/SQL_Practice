@@ -1,5 +1,5 @@
 import psycopg2
-from config import config, text_path
+from config import config, directory_path
 import os.path
 from questions.questions_helper import write_questions_queries_results
 import plotly
@@ -31,7 +31,9 @@ def report():
     FROM film
     """
     costly_df = pd.read_sql_query(costly_films, conn)
-    costly_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\costly_df.csv")
+    relative_path = "report_CSVs/costly_df.csv"
+    complete_path = os.path.join(directory_path, relative_path)
+    costly_df.to_csv(path_or_buf=complete_path)
     
 
     # Over time, how popular are the different ratings and categories of films?
@@ -44,7 +46,9 @@ def report():
         LEFT JOIN category USING (category_id)
     """
     popular_df = pd.read_sql_query(popular_films, conn)
-    popular_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\popular_df.csv")
+    relative_path = "report_CSVs/popular_df.csv"
+    complete_path = os.path.join(directory_path, relative_path)
+    popular_df.to_csv(path_or_buf=complete_path)
     # How many films in inventory are in each category/rating?
     inventory = """
     SELECT i.inventory_id, f.title, f.rating, c.name as category
@@ -54,7 +58,9 @@ def report():
         LEFT JOIN category as c USING(category_id)
     """
     inventory_df = pd.read_sql_query(inventory, conn)
-    inventory_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\inventory_df.csv")
+    relative_path = "report_CSVs/inventory_df.csv"
+    complete_path = os.path.join(directory_path, relative_path)
+    inventory_df.to_csv(path_or_buf=complete_path)
 
 
     # Over time, how do the performances of the different stores compare?
@@ -66,7 +72,9 @@ def report():
         LEFT JOIN city USING(city_id)
     """
     stores_df = pd.read_sql_query(stores, conn)
-    stores_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\stores_df.csv")
+    relative_path = "report_CSVs/stores_df.csv"
+    complete_path = os.path.join(directory_path, relative_path)
+    stores_df.to_csv(path_or_buf=complete_path)
 
     stores_inventory = """
     SELECT inventory.inventory_id, customer.store_id, city.city, address.district
@@ -77,7 +85,9 @@ def report():
         LEFT JOIN city USING(city_id)
     """
     stores_inventory_df = pd.read_sql_query(stores_inventory, conn)
-    stores_inventory_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\stores_inventory_df.csv")
+    relative_path = "report_CSVs/stores_inventory_df.csv"
+    complete_path = os.path.join(directory_path, relative_path)
+    stores_inventory_df.to_csv(path_or_buf=complete_path)
 
 
     # What is the current total outstanding balance of all of our customers?
@@ -113,7 +123,9 @@ def report():
     balances_df.reset_index(inplace=True)
     balances_df['Customer_ID'] = balances_df['index']
     balances_df.drop('index', axis=1, inplace=True)
-    balances_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\balances_df.csv")
+    relative_path = "report_CSVs/balances_df.csv"
+    complete_path = os.path.join(directory_path, relative_path)
+    balances_df.to_csv(path_or_buf=complete_path)
     return
 
 

@@ -20,3 +20,4 @@ def config(filename='database.ini', section='postgresql'):
     return db
 
 text_path = "C:/Users/Chris/Desktop/Career/ComplexPGSQL/sample_complex/my_text_files"
+directory_path = "C:/Users/Chris/Desktop/Career/ComplexPGSQL/sample_complex"
