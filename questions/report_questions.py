@@ -6,7 +6,9 @@ import plotly
 import pandas as pd
 
 # Reference for embedding plotly figures into Markdown: http://www.kellieottoboni.com/posts/2017/08/plotly-markup/
+## Doesn't work -> RMarkdown works with Python and it's pretty simple
 
+# This function queries the database and creates the CSV files needed to easily do further analysis
 def report():
     # read connection parameters
     params = config()
@@ -19,11 +21,6 @@ def report():
     def exec_query(query: str):
         cur.execute(query)
         return cur.fetchall()
-
-    # Instantiate lists for the questions, queries, and results
-    # questions = []
-    # queries = []
-    # final_results = []
 
     # Which films are most costly to replace and why?
     costly_films = """
@@ -118,6 +115,7 @@ def report():
         cust_balances[i] = exec_query(bal_query)[0][0]
         # This is calculated as of the last time a customer MADE A PAYMENT, should probably calculate it on the last day that the payment table was updated overall
         ## FIXED and it didn't change anything ¯\_(ツ)_/¯
+        ### Correction: it did change and now everything looks legit!
     
     balances_df = pd.DataFrame.from_dict(cust_balances, orient='index', columns=['Balance'])
     balances_df.reset_index(inplace=True)

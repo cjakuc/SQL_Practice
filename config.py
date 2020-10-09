@@ -19,5 +19,7 @@ def config(filename='database.ini', section='postgresql'):
 
     return db
 
+# Absolute path to the my_text_files folder
 text_path = "C:/Users/Chris/Desktop/Career/ComplexPGSQL/sample_complex/my_text_files"
+# Absolute path to the sample_complex directory
 directory_path = "C:/Users/Chris/Desktop/Career/ComplexPGSQL/sample_complex"
