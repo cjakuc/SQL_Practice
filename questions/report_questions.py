@@ -81,27 +81,23 @@ def report():
 
 
     # What is the current total outstanding balance of all of our customers?
-    # questions.append("What is the current total outstanding balance of all of our customers?")
-    # balance = """
+    
+    # There are customers w/ unique IDs 1-599
+    ## We can use the built-in get_customer_balance(customer_id, timestamp without time zone) function for each customer to get each customer's balance
 
-    # """
-    # queries.append(balance)
-    # balance_results = exec_query(balance)
-    # final_results.append(balance_results)
-
-
-    # name_of_file = "report.txt"
-    # complete_name = os.path.join(text_path, name_of_file)
-    # f = open(complete_name, "w")
-    # f.write(f"\Report Questions\n")
-    # for i in range(len(questions)):
-    #     f.write(f"\n    Question: {questions[i]}\n")
-    #     f.write(f"  {queries[i]}\n")
-    #     f.write(f"      {final_results[i]}\n")
-    # f.write(f"\n")
-
-    # f.close()
-
-    # write_questions_queries_results(questions,queries,final_results,filename="Report Questions")
-
+    # We first need to get the timestamp of each customer's most recent payment
+    ## We can do this in the same query as we get their current outstanding balance
+    cust_balances = {}
+    for i in range(1,600):
+        bal_query = f"""
+        SELECT get_customer_balance({i}, ((SELECT p.payment_date FROM payment as p WHERE p.customer_id = {i} ORDER BY p.payment_date DESC LIMIT 1)))
+        """
+        # SELECT get_customer_balance(1::integer, (SELECT p.payment_date::timestamp without time zone FROM payment as p WHERE p.customer_id = 1 ORDER BY p.payment_date DESC LIMIT 1))
+        cust_balances[i] = exec_query(bal_query)[0][0]
+    
+    balances_df = pd.DataFrame.from_dict(cust_balances, orient='index', columns=['Balance'])
+    balances_df.reset_index(inplace=True)
+    balances_df['Customer_ID'] = balances_df['index']
+    balances_df.drop('index', axis=1, inplace=True)
+    balances_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\balances_df.csv")
     return
