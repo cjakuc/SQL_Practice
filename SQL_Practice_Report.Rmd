@@ -396,9 +396,11 @@ summary_df = pd.DataFrame(summary, columns=['Balance'])
 summary_df.reset_index(inplace=True)
 summary_df['Statistics'] = summary_df['index']
 summary_df = summary_df.drop('index', axis=1)
+# Show $ and round in the table
+summary_df['Balance'] = summary_df['Balance'].map(u"\u0024{:,.0f}".format)
 
 # Table of summary stats
-colors = ["lavender" if col == "Balance" else "red" for col in summary_df.columns.values]
+colors = ["lavender" for col in summary_df.columns.values]
 title = "Summary Statistics of Customer Balances"
 layout = go.Layout(title_text=title, title_x=0.5,
                    width=1000,
@@ -419,6 +421,9 @@ fig.write_html("data_viz\\CustBalStats.html")
 ```
 
 
+This is a report I have created to practice performing analysis on SQL databases. The data is for a fake DVD rental company and was downloaded from [here](https://www.postgresqltutorial.com/postgresql-sample-database/). I then locally hosted the database to do exploratory queries and analysis. The full project can be found [here](https://github.com/cjakuc/SQL_Practice).
+
+My goal was to mimic real world business questions as best as possible and explore the data for answers and avenues for further analysis. You can check out more of my work on my [portfolio page](https://cjakuc.github.io/) or feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/chrisjakuc/)!
 
 
 # Which films are most costly to replace and why?
@@ -531,14 +536,26 @@ The limitations of using fake data really made themselves known when looking at 
 # What is the current total balance of all of our customers?
 
 In order to calculate the total balance of all the customers, I used a set of payment rules set out in the custom functions of the provided database that defines a customer's balance:
+
 1. Calculate and charge rental fees for all previous rentals
+
 2. Charge one dollar for every day the previous rentals are overdue
+
 3. If a film is overdue for longer than 2 times the rental duration, charge the replacement cost
+
 4. Credit all payments made before the date specified (I used the last date that any payment was made in the payment table)
 
-The custom function needed a bit of editing, but I was able to calculate the current (as of the most recent payment on May 14th, 2007) balance of all 599 customers in the data. In aggregate, the customers have a total credit of approximately \$11,734.30. Without knowing more details about the business model of the company, it is difficult to tell if so many customers carrying a positive balance is expected. Conversely, the total amount owed by all customers is \$529.95. 
+The custom function needed a bit of editing, but I was able to calculate the current (as of the most recent payment on May 14th, 2007) balance of all 599 customers in the data. In aggregate, the customers have a total positive balance of approximately \$11,734.30. In other words, they have paid more than they owed. Without knowing more details about the business model of the company, it is difficult to tell if so many customers carrying a positive balance is expected. Conversely, the total amount owed by all customers is \$529.95.
+
+Looking at the summary statistics table shown in Figure 13, we can learn more about the balances carried by the customers. The customers, on average, have a positive balance of nearly \$20. The largest positive balance is \$70.03 and the lowest balance is \$-24.92. 
 
 **Figure 13**
 ```{r, echo = FALSE}
 htmltools::includeHTML("data_viz\\CustBalStats.html")
 ```
+
+**Conclusion**
+
+It would be very helpful to be able to talk with an employee at this fictional DVD rental company to better understand why so many customers have positive balances. Once that was made clear, it would be interesting to analyze the behavior of customers who are charged the replacement cost for DVDs kept for twice as long as the rental duration. I suspect that a DVD rental company might be losing customers by instating a fee like this; potentially, a customer who has to pay the replacement cost may simply choose to never return to the store. An interesting way to test this could be rolling out a new policy at one location. The policy would not penalize overdue rentals with the replacement cost of the DVD and the goal would be to see if customers with long overdue rentals are retained. It could effectively be an A/B test of the policies and could contain a profit analysis to determine which policy is better for the long-term success of the company. 
+
+Stepping away from the actual analysis, this project was a lot of fun to work on and I definitely honed my SQL skills. Thank you for taking the time to read my report!

@@ -115,3 +115,64 @@ def report():
     balances_df.drop('index', axis=1, inplace=True)
     balances_df.to_csv(path_or_buf=r"C:\Users\Chris\Desktop\Career\ComplexPGSQL\sample_complex\report_CSVs\balances_df.csv")
     return
+
+
+# The SQL for the function that returns a customer's balance
+## The part I had to fix is the querying of v_overfees
+### It originally used a COALESCE(SUM(IF())) statement that broke on the IF statement
+
+# -- FUNCTION: public.get_customer_balance(integer, timestamp without time zone)
+
+# -- DROP FUNCTION public.get_customer_balance(integer, timestamp without time zone);
+
+# CREATE OR REPLACE FUNCTION public.get_customer_balance(
+# 	p_customer_id integer,
+# 	p_effective_date timestamp without time zone)
+#     RETURNS numeric
+#     LANGUAGE 'plpgsql'
+
+#     COST 100
+#     VOLATILE 
+# AS $BODY$
+#        --#OK, WE NEED TO CALCULATE THE CURRENT BALANCE GIVEN A CUSTOMER_ID AND A DATE
+#        --#THAT WE WANT THE BALANCE TO BE EFFECTIVE FOR. THE BALANCE IS:
+#        --#   1) RENTAL FEES FOR ALL PREVIOUS RENTALS
+#        --#   2) ONE DOLLAR FOR EVERY DAY THE PREVIOUS RENTALS ARE OVERDUE
+#        --#   3) IF A FILM IS MORE THAN RENTAL_DURATION * 2 OVERDUE, CHARGE THE REPLACEMENT_COST
+#        --#   4) SUBTRACT ALL PAYMENTS MADE BEFORE THE DATE SPECIFIED
+# DECLARE
+#     v_rentfees DECIMAL(5,2); --#FEES PAID TO RENT THE VIDEOS INITIALLY
+#     v_overfees INTEGER;      --#LATE FEES FOR PRIOR RENTALS
+#     v_payments DECIMAL(5,2); --#SUM OF PAYMENTS MADE PREVIOUSLY
+# BEGIN
+#     SELECT COALESCE(SUM(film.rental_rate),0) INTO v_rentfees
+#     FROM film, inventory, rental
+#     WHERE film.film_id = inventory.film_id
+#       AND inventory.inventory_id = rental.inventory_id
+#       AND rental.rental_date <= p_effective_date
+#       AND rental.customer_id = p_customer_id;
+
+#     SELECT SUM(
+# 		CASE
+# 			WHEN ((rental.return_date - rental.rental_date) > (film.rental_duration * '1 day'::interval))
+# 				AND ((rental.return_date - rental.rental_date) > ((film.rental_duration * '1 day'::interval)*2)) THEN (EXTRACT(epoch FROM (((rental.return_date - rental.rental_date) - (film.rental_duration * '1 day'::interval))))::integer/86400 + film.replacement_cost)
+# 			WHEN ((rental.return_date - rental.rental_date) > (film.rental_duration * '1 day'::interval)) THEN (EXTRACT(epoch FROM ((rental.return_date - rental.rental_date) - (film.rental_duration * '1 day'::interval))))::integer/86400
+# 				ELSE 0
+# 		END) INTO v_overfees
+# 	FROM rental, inventory, film
+#     WHERE film.film_id = inventory.film_id
+#       AND inventory.inventory_id = rental.inventory_id
+#       AND rental.rental_date <= p_effective_date
+#       AND rental.customer_id = p_customer_id;
+
+#     SELECT COALESCE(SUM(payment.amount),0) INTO v_payments
+#     FROM payment
+#     WHERE payment.payment_date <= p_effective_date
+#     AND payment.customer_id = p_customer_id;
+
+#     RETURN v_payments - v_rentfees - v_overfees;
+# END
+# $BODY$;
+
+# ALTER FUNCTION public.get_customer_balance(integer, timestamp without time zone)
+#     OWNER TO postgres;
